@@ -16,7 +16,7 @@ jobs:
       - name: Install poetry
         run: |
           export POETRY_HOME=/opt/poetry
-          curl -sSL https://install.python-poetry.org | POETRY_VERSION={{ env.POETRY_VERSION }} python{{ env.PYTHON_VERSION }}-
+          curl -sSL https://install.python-poetry.org | POETRY_VERSION=${{ env.POETRY_VERSION }} python${{ env.PYTHON_VERSION }}-
           echo $POETRY_HOME/bin/poetry --version
 
       - name: Install Python and dependencies.
