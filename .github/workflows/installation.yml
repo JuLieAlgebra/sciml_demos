@@ -1,6 +1,14 @@
 name: Install Python, Poetry, and project
 run-name: ${{ github.actor }}
-on: [push]
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types:
+      - opened
+      - synchronize
 
 env:
   PYTHON_VERSION: "3.10"
