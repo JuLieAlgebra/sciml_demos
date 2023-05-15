@@ -1,34 +1,38 @@
 """Dynamic mode decomposition demo."""
+from typing import Tuple
+
 import numpy as np
 import simulate
 
-def dmd(state_history: list, r: int=None):
-	"""
-	SVD-based dynamic mode decomposition.
 
-	Assumes state_history[0] is time = 0 and state_history[-1] grabs the the last
-	state.
-	"""
-	state_history = np.array(state_history)
-	last_state = state_history[:-1].copy()
-	state = state_history[1:].copy()
+def dmd(state_history: list, r: int = None) -> Tuple[np.array, np.array, np.array]:
+    """
+    SVD-based dynamic mode decomposition.
 
-	U, S, V = np.linalg.svd(last_state, full_matrices=False)
+    Assumes state_history[0] is an np.array of the state at time t = 0 and state_history[-1] grabs the the last
+    state.
+    """
+    state_history = np.array(state_history)
+    last_state = state_history[:-1].copy()
+    state = state_history[1:].copy()
 
-	koopman_matrix = U[:, : r].T @ state @ V[: r, :] @ np.diag(np.reciprocal(S[: r]))
+    U, S, V = np.linalg.svd(last_state, full_matrices=False)
 
-	eigenvalues, eigenvectors = np.linalg.eig(koopman_matrix)
+    koopman_matrix = (
+        U[:, :r].conj().T @ state @ V[:r, :].conj() @ np.diag(np.reciprocal(S[:r]))
+    )
 
-	return koopman_matrix, eigenvalues, eigenvectors
+    eigenvalues, eigenvectors = np.linalg.eig(koopman_matrix)
+
+    return koopman_matrix, eigenvalues, eigenvectors
 
 
-if __name__ == '__main__':
-	# Example usage for multivariate time series.
+if __name__ == "__main__":
+    # Example usage for multivariate time series.
     timeseries = simulate.TimeSeries()
 
     steps = 100
-    for i in range(steps):
-        timeseries.forward()
+    timeseries.forward(steps)
 
     A, eigenvalues, eigenvectors = dmd(timeseries.state_history)
 
