@@ -1,14 +1,16 @@
 """Dynamic mode decomposition demo."""
-from typing import Tuple
+from typing import List, Tuple
 
 import numpy as np
 
 import koopman.simulate
 
 
-def dmd(state_history: list, r: int = None) -> Tuple[np.array, np.array, np.array]:
+def dmd(
+    state_history: List[np.array], r: int = None
+) -> Tuple[np.array, np.array, np.array]:
     """
-    SVD-based dynamic mode decomposition.
+    Implements SVD-based dynamic mode decomposition.
 
     Assumes state_history[0] is an np.array of the state at time t = 0 and state_history[-1] grabs the the last
     state.
