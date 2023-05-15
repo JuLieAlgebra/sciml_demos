@@ -1,0 +1,30 @@
+name: Install Python, Poetry, and project
+run-name: ${{ github.actor }}
+on: [push]
+
+env:
+  PYTHON_VERSION: 3.10
+  POETRY_VERSION: 1.2.0
+
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+
+      - name: Install poetry
+        run: |
+          export POETRY_HOME=/opt/poetry
+          curl -sSL https://install.python-poetry.org | POETRY_VERSION={{ env.POETRY_VERSION }} python{{ env.PYTHON_VERSION }}-
+          echo $POETRY_HOME/bin/poetry --version
+
+      - name: Install Python and dependencies.
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          cache: 'poetry'
+
+      - name: Install repository
+        run: |
+          poetry install
