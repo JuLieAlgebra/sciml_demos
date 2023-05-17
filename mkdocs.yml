@@ -1,0 +1,7 @@
+site_name: Koopman Docs
+
+theme:
+  name: "material"
+
+plugins:
+  - mkdocstrings

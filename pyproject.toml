@@ -11,13 +11,19 @@ numpy = "*"
 matplotlib = "*"
 pre-commit = "*"
 torch = "*"
-ipykernel = "^6.29.5"
-
+ipykernel = "*"
+mkdocs = "*"
+mkdocs-autorefs = "*"
 
 [tool.poetry.group.test.dependencies]
-pytest = "^7.3.1"
-pytest-cov = "^4.0.0"
-hypothesis = "^6.75.3"
+pytest = "*"
+pytest-cov = "*"
+hypothesis = "*"
+
+[tool.poetry.group.docs.dependencies]
+mkdocs = "*"
+mkdocstrings = {extras = ["python"], version = "*"}
+mkdocs-material = "*"
 
 [build-system]
 requires = ["poetry-core"]

@@ -31,9 +31,9 @@ def dmd(
 
     Returns:
         A tuple containing the computed DMD matrix, eigenvalues, and eigenvectors.
-        - koopman_matrix: The computed Koopman matrix representing the linear dynamics of the system.
-        - eigenvalues: The eigenvalues of the Koopman matrix.
-        - eigenvectors: The eigenvectors of the Koopman matrix.
+                - koopman_matrix: The computed Koopman matrix representing the linear dynamics of the system.
+                - eigenvalues: The eigenvalues of the Koopman matrix.
+                - eigenvectors: The eigenvectors of the Koopman matrix.
 
     Notes:
         - The state history should have at least two time steps for DMD computation.

@@ -1,0 +1,3 @@
+Simulate documentation.
+
+::: koopman.simulate
