@@ -1,6 +1,7 @@
 """Dynamic mode decomposition demo."""
 from typing import List, Tuple
 
+import matplotlib.pyplot as plt
 import numpy as np
 
 import koopman.simulate
@@ -30,15 +31,15 @@ def dmd(
     return koopman_matrix, eigenvalues, eigenvectors
 
 
+
 if __name__ == "__main__":
-    # Example usage for multivariate time series.
     timeseries = koopman.simulate.TimeSeries()
 
     steps = 100
-    timeseries.forward(steps)
+    timeseries.forward(timesteps=100)
+    r = 2
 
-    A, eigenvalues, eigenvectors = dmd(timeseries.state_history)
-
-    print("Koopman operator:\n", A)
+    koopman_matrix, eigenvalues, eigenvectors = dmd(timeseries.state_history, r)
+    print("Koopman operator:\n", koopman_matrix)
     print("Eigen values:\n", eigenvalues)
     print("Eigen vectors:\n", eigenvectors)
