@@ -17,13 +17,13 @@ class TimeSeries:
         self.t = 0
         self.state_history = [self.state]
 
-    def f1(self, t: np.array) -> np.array:
+    def f1(self, t: int) -> float:
         """Function for x_1_t"""
-        return 0.9 * np.sin(0.5 * t)
+        return 0.9 * np.sin(0.5 * self.state_history[t][0] * t)
 
-    def f2(self, t: np.array) -> np.array:
+    def f2(self, t: int) -> float:
         """Function for x_2_t"""
-        return 0.9 * np.sin(0.3 * t)
+        return 0.9 * np.sin(0.3 * self.state_history[t][1] * t)
 
     def forward(self, timesteps: int = 1) -> None:
         """Produce next state."""
@@ -41,7 +41,6 @@ class TimeSeries:
 
         plt.title(f"{self.dim}-dimensional plot of state evolution")
         if self.dim == 2:
-            # plt.plot(history[:, 0], history[:, 1])
             plt.plot(np.arange(steps), history[:, 0], label="f1(t)")
             plt.plot(np.arange(steps), history[:, 1], label="f2(t)")
             plt.legend()
@@ -50,6 +49,8 @@ class TimeSeries:
         elif self.dim == 1:
             plt.plot(np.arange(steps), history.flatten())
             plt.xlabel("Time steps")
+        else:
+            raise ValueError(f"Expected self.dim to be 1 or 2, received {self.dim}")
 
         plt.ylabel("f(t)")
         plt.show()
