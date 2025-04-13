@@ -1,7 +1,15 @@
+""" 
+Demonstrate two ways of solving the 1D wave equation with Dirichlet boundary conditions
+and a particular initial condition. PINNs are not typically a useful tool for problems concerning
+PDEs, but this is a demonstration of their usage as an ansatz.
+"""
 from typing import Optional, Tuple
 
 import matplotlib.pyplot as plt
 import numpy as np
+import torch
+import torch.nn as nn
+import torch.optim as optim
 
 
 # ----------------------------
@@ -11,9 +19,9 @@ class FiniteDifferenceWaveSolver:
     """
     Finite Difference solver for the 1D wave equation
 
-    The PDE is: \( u_{tt}=c^2\,u_{xx} \)
-    with u(0,t)=u(L,t)=0 and initial conditions
-    \( u(x,0)=\sin(\pi x) \) and \( u_t(x,0)=0 \).
+    The PDE is: u_{tt}=c^2*u_{xx}
+    with Dirichlet boundary condition u(0,t)=u(L,t)=0 and initial conditions
+    u(x,0)=sin(pi*x) and u_t(x,0)=0.
     """
 
     def __init__(self, L: float, c: float, T: float, nx: int, nt: int):
@@ -27,8 +35,8 @@ class FiniteDifferenceWaveSolver:
         self.dt = T / (nt - 1)
         self.lambda_val = c * self.dt / self.dx  # Courant number
 
-        self.x = np.linspace(0, L, nx)
-        self.t = np.linspace(0, T, nt)
+        self.x = np.linspace(0, L, nx)  # x-grid
+        self.t = np.linspace(0, T, nt)  # t-grid
         self.u = np.zeros((nt, nx))  # Solution array
 
     def initialize(self) -> None:
@@ -41,7 +49,7 @@ class FiniteDifferenceWaveSolver:
         self.u[1, 1:-1] = self.u[0, 1:-1] + 0.5 * self.lambda_val**2 * (
             self.u[0, 2:] - 2 * self.u[0, 1:-1] + self.u[0, :-2]
         )
-        # Enforce Dirichlet boundary conditions
+        # Enforce boundary conditions
         self.u[:, 0] = 0
         self.u[:, -1] = 0
 
@@ -71,11 +79,6 @@ class FiniteDifferenceWaveSolver:
 # ----------------------------
 # PINN (Physics-Informed Neural Network) Solver
 # ----------------------------
-import torch
-import torch.nn as nn
-import torch.optim as optim
-
-
 class WavePINN(nn.Module):
     """
     Neural network architecture for approximating the wave equation solution.
@@ -105,7 +108,7 @@ class WaveEquationPINNSolver:
     """
     A PINN solver for the 1D wave equation:
 
-    \( u_{tt}=c^2\,u_{xx} \)
+    u_{tt}=c^2*u_{xx}
 
     with u(0,t)=u(L,t)=0, u(x,0)=sin(pi*x), and u_t(x,0)=0.
     """
@@ -129,6 +132,7 @@ class WaveEquationPINNSolver:
             if device is None
             else torch.device(device)
         )
+        print(f"Using {self.device}")
         self.model = WavePINN().to(self.device)
 
         # Collocation points for enforcing the PDE residual
