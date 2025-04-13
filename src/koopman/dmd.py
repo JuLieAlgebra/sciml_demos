@@ -2,7 +2,8 @@
 from typing import Tuple
 
 import numpy as np
-import simulate
+
+import koopman.simulate
 
 
 def dmd(state_history: list, r: int = None) -> Tuple[np.array, np.array, np.array]:
@@ -29,7 +30,7 @@ def dmd(state_history: list, r: int = None) -> Tuple[np.array, np.array, np.arra
 
 if __name__ == "__main__":
     # Example usage for multivariate time series.
-    timeseries = simulate.TimeSeries()
+    timeseries = koopman.simulate.TimeSeries()
 
     steps = 100
     timeseries.forward(steps)
